@@ -1,35 +1,51 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Use useRouter for redirect
 import Modal from 'react-modal';
 import axios from 'axios';
 import './view-students.css';
+ // Import the session check function
 
 Modal.setAppElement('body');
 
 const ViewStudentsPage = () => {
   const [students, setStudents] = useState([]);
-  const [filteredStudents, setFilteredStudents] = useState([]); // Stores filtered results
-  const [searchQuery, setSearchQuery] = useState(""); // Stores search input
+  const [filteredStudents, setFilteredStudents] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [availableCourses, setAvailableCourses] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
-  const [isSaving, setIsSaving] = useState(false); // Loading state for save button
+  const [isSaving, setIsSaving] = useState(false);
+  const router = useRouter();
 
+  // Check if admin is logged in
   useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const response = await axios.get('/api/students');
-        setStudents(response.data);
-        setFilteredStudents(response.data); // Initially, show all students
-      } catch (error) {
-        console.error("Error fetching students:", error);
+    const checkSession = async () => {
+      const res = await fetch("/api/admin/check-session"); // Use API to check session
+      const data = await res.json();
+      if (!data.isLoggedIn) {
+        router.push("/login"); // Redirect to login page if not logged in
+      } else {
+        fetchStudents();
       }
     };
-    fetchStudents();
-  }, []);
+
+    checkSession();
+  }, [router]);
+
+  // Fetch students from the API
+  const fetchStudents = async () => {
+    try {
+      const response = await axios.get('/api/students');
+      setStudents(response.data);
+      setFilteredStudents(response.data); // Initially, show all students
+    } catch (error) {
+      console.error("Error fetching students:", error);
+    }
+  };
 
   // Handle search input changes
   const handleSearchChange = (event) => {
@@ -37,15 +53,16 @@ const ViewStudentsPage = () => {
     setSearchQuery(query);
 
     if (query === "") {
-      setFilteredStudents(students); // Show all students if input is empty
+      setFilteredStudents(students);
     } else {
       const filtered = students.filter(student =>
-        student.studentId.includes(query) // Filter by studentId
+        student.studentId.includes(query)
       );
       setFilteredStudents(filtered);
     }
   };
 
+  // Open modal with student details
   const handleOpenModal = async (student) => {
     setSelectedStudent(student);
     setSelectedCourses(student.enrolledCourses.map(course => course.id));
@@ -58,13 +75,15 @@ const ViewStudentsPage = () => {
     }
 
     setIsModalOpen(true);
-    setSuccessMessage(""); // Clear success message when opening modal
+    setSuccessMessage("");
   };
 
+  // Close the modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
+  // Handle course selection in the modal
   const handleCourseSelection = (courseId) => {
     setSelectedCourses(prev =>
       prev.includes(courseId)
@@ -73,9 +92,10 @@ const ViewStudentsPage = () => {
     );
   };
 
+  // Save the selected courses for the student
   const handleSaveChanges = async () => {
     try {
-      setIsSaving(true); // Start loading state
+      setIsSaving(true);
 
       const updatedStudent = {
         id: selectedStudent.id,
@@ -100,8 +120,8 @@ const ViewStudentsPage = () => {
         )
       );
 
-      setSuccessMessage(response.data.message); // Show success message
-      setIsSaving(false); // Stop loading
+      setSuccessMessage(response.data.message);
+      setIsSaving(false);
     } catch (error) {
       console.error("Error updating student:", error);
       setSuccessMessage("Error updating student.");
@@ -112,20 +132,12 @@ const ViewStudentsPage = () => {
   return (
     <div>
       <h1>View Students</h1>
-
       {/* Search Bar */}
       <input
         type="text"
-        placeholder="Search by Student ID (e.g., 0001)"
+        placeholder="Search by Student ID"
         value={searchQuery}
         onChange={handleSearchChange}
-        style={{
-          marginBottom: "10px",
-          padding: "8px",
-          width: "250px",
-          border: "1px solid #ccc",
-          borderRadius: "4px",
-        }}
       />
 
       <table>
@@ -151,7 +163,7 @@ const ViewStudentsPage = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="4" style={{ textAlign: "center", color: "red" }}>No students found</td>
+              <td colSpan="4">No students found</td>
             </tr>
           )}
         </tbody>
@@ -178,7 +190,7 @@ const ViewStudentsPage = () => {
             ))}
           </div>
 
-          {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+          {successMessage && <p>{successMessage}</p>}
           <button onClick={handleSaveChanges} disabled={isSaving}>
             {isSaving ? "Saving..." : "Save Changes"}
           </button>

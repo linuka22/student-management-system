@@ -1,0 +1,101 @@
+/* Home Page Container */
+.home-container {
+    max-width: 1200px;
+    margin: 80px auto 0; /* Added top margin to avoid overlapping with navbar */
+    padding: 40px 20px;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+}
+
+/* Welcome Message */
+.home-container h1 {
+    font-size: 28px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+/* Stats Section */
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.stat-box {
+    background: #28a745;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    width: 250px;
+    text-align: center;
+}
+
+.stat-box:hover {
+    transform: scale(1.05);
+}
+
+.stat-box h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.stat-box p {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+/* Quick Links Section */
+.quick-links, .upcoming-deadlines {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.quick-links h3, .upcoming-deadlines h3 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.quick-links ul, .upcoming-deadlines ul {
+    list-style: none;
+    padding: 0;
+}
+
+.quick-links ul li, .upcoming-deadlines ul li {
+    font-size: 16px;
+    padding: 10px;
+    background: #ffffff;
+    margin: 8px 0;
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.2s;
+}
+
+.quick-links ul li:hover, .upcoming-deadlines ul li:hover {
+    background: #e2e6ea;
+}
+
+.quick-links ul li a, .upcoming-deadlines ul li a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* Ensure navbar is unaffected */
+nav {
+    position: relative;
+    z-index: 1000;
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import "./navbar.css";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -8,12 +9,25 @@ export default function Navbar() {
   const [adminName, setAdminName] = useState(null);
   const router = useRouter();
 
-  // Check if admin is logged in on page load
-  useEffect(() => {
+  // Function to check and update the admin state
+  const checkAuthStatus = () => {
     const storedAdmin = localStorage.getItem("adminName");
-    if (storedAdmin) {
-      setAdminName(storedAdmin);
-    }
+    setAdminName(storedAdmin ? storedAdmin : null);
+  };
+
+  useEffect(() => {
+    // Check on component mount
+    checkAuthStatus();
+
+    // Listen for localStorage changes (e.g., after login)
+    const handleStorageChange = () => {
+      checkAuthStatus();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   // Logout function
@@ -23,7 +37,7 @@ export default function Navbar() {
     // Clear session
     localStorage.removeItem("adminName");
     setAdminName(null);
-    router.refresh(); // Refresh to update UI
+    router.refresh(); // Refresh UI to reflect logout
   };
 
   return (

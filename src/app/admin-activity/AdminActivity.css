@@ -1,0 +1,55 @@
+/* Scoped CSS for Admin Activity Log Page */
+.admin-activity-container {
+  padding: 100px;
+  margin-top: 80px; /* Adjust space below the fixed navbar */
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 0 auto; /* Center the content */
+}
+
+.admin-activity-container h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.admin-activity-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.admin-activity-container table th,
+.admin-activity-container table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.admin-activity-container table th {
+  background-color: #070707;
+  font-weight: bold;
+}
+
+.admin-activity-container table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.admin-activity-container table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.admin-activity-container table td {
+  color: #555;
+  font-size: 14px;
+}
+
+.admin-activity-container p {
+  text-align: center;
+  color: #777;
+  font-size: 16px;
+  margin-top: 20px;
+}

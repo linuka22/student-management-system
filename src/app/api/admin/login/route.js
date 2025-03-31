@@ -1,3 +1,4 @@
+// src/app/api/admin/login/route.js
 import { cookies } from "next/headers";
 import { PrismaClient } from "@prisma/client";
 
@@ -16,9 +17,9 @@ export async function POST(req) {
       return Response.json({ message: "Invalid credentials" }, { status: 401 });
     }
 
-    // Await cookies before setting session
-    const cookieStore = await cookies();
-    cookieStore.set("adminSession", admin.id, { httpOnly: true });
+    // Set the adminSession cookie with the admin id
+    const cookieStore = cookies();
+    cookieStore.set("adminSession", admin.id, { httpOnly: true, maxAge: 60 * 60 * 24 * 7 }); // Expires in 1 week
 
     // Log login activity in AuditLog
     await prisma.auditLog.create({
@@ -33,4 +34,3 @@ export async function POST(req) {
     return Response.json({ message: "Server error" }, { status: 500 });
   }
 }
-

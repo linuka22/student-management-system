@@ -1,7 +1,8 @@
 "use client";
 
-import "./AddStudent.css";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import "./AddStudent.css";
 
 export default function AddStudent() {
   const [formData, setFormData] = useState({
@@ -9,12 +10,29 @@ export default function AddStudent() {
     lastName: "",
     address: "",
     dob: "",
-    degreeProgramId: "", // 🔥 Changed to match backend key
-    courses: [], // Array of selected course IDs
+    degreeProgramId: "",
+    courses: [],
   });
   const [message, setMessage] = useState("");
   const [degreePrograms, setDegreePrograms] = useState([]);
   const [availableCourses, setAvailableCourses] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // To track login status
+  const router = useRouter();
+
+  // Check if the user is logged in by calling the API route
+  useEffect(() => {
+    const checkSession = async () => {
+      const res = await fetch("/api/admin/check-session"); // API to check session
+      const data = await res.json();
+      if (!data.isLoggedIn) {
+        router.push("/login"); // Redirect to login page if not logged in
+      } else {
+        setIsLoggedIn(true);
+      }
+    };
+
+    checkSession();
+  }, [router]);
 
   // Fetch degree programs when component mounts
   useEffect(() => {
@@ -55,7 +73,6 @@ export default function AddStudent() {
       return { ...prevState, courses };
     });
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,7 +83,7 @@ export default function AddStudent() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...formData,
-        degreeProgramId: parseInt(formData.degreeProgramId), // 🔥 Ensure it's a number
+        degreeProgramId: parseInt(formData.degreeProgramId), // Ensure it's a number
       }),
     });
 
@@ -86,20 +103,58 @@ export default function AddStudent() {
     }
   };
 
+  if (!isLoggedIn) {
+    return <div>Loading...</div>; // Show a loading state while checking login status
+  }
+
   return (
     <div className="form-container">
       <h2>Add Student</h2>
       {message && <p className="message">{message}</p>}
       <form onSubmit={handleSubmit}>
-        <input type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
-        <input type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required />
-        <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} required />
-        <input type="date" name="dob" value={formData.dob} onChange={handleChange} required />
-        
-        <select name="degreeProgramId" value={formData.degreeProgramId} onChange={handleDegreeProgramChange} required>
+        <input
+          type="text"
+          name="firstName"
+          placeholder="First Name"
+          value={formData.firstName}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="lastName"
+          placeholder="Last Name"
+          value={formData.lastName}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="address"
+          placeholder="Address"
+          value={formData.address}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="date"
+          name="dob"
+          value={formData.dob}
+          onChange={handleChange}
+          required
+        />
+
+        <select
+          name="degreeProgramId"
+          value={formData.degreeProgramId}
+          onChange={handleDegreeProgramChange}
+          required
+        >
           <option value="">Select Degree Program</option>
           {degreePrograms.map((degree) => (
-            <option key={degree.id} value={degree.id}>{degree.name}</option>
+            <option key={degree.id} value={degree.id}>
+              {degree.name}
+            </option>
           ))}
         </select>
 

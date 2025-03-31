@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import "./login.css"; // Import the CSS for styling
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -11,7 +12,7 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
+    setError(""); // Clear previous error
 
     const res = await fetch("/api/admin/login", {
       method: "POST",
@@ -23,22 +24,23 @@ export default function Login() {
 
     if (res.ok) {
       localStorage.setItem("adminName", data.username);
-      router.push("/");
+      router.push("/"); // Redirect to home after successful login
     } else {
-      setError(data.error);
+      setError(data.error || "Invalid username or password.");
     }
   };
 
   return (
     <div className="login-container">
       <h2>Administrator Login</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleLogin} className="login-form">
         <input
           type="text"
           placeholder="Enter Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
+          className="input-field"
         />
         <input
           type="password"
@@ -46,11 +48,11 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="input-field"
         />
-        {error && <p className="error">{error}</p>}
-        <button type="submit">Login</button>
+        {error && <p className="error-message">{error}</p>}
+        <button type="submit" className="login-btn">Login</button>
       </form>
     </div>
   );
 }
-

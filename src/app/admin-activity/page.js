@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import "./AdminActivity.css"; // Assuming you have a CSS file for styling
+import { useEffect, useState } from 'react';
 
 export default function AdminActivity() {
   const [logs, setLogs] = useState([]);
@@ -17,23 +18,27 @@ export default function AdminActivity() {
   return (
     <div className="admin-activity-container">
       <h2>Admin Activity Log</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Action</th>
-            <th>Timestamp</th>
-          </tr>
-        </thead>
-        <tbody>
-          {logs.map((log) => (
-            <tr key={log.id}>
-              <td>{log.action}</td>
-              <td>{new Date(log.timestamp).toLocaleString()}</td>
+      
+      {logs.length === 0 ? (
+        <p>No activity logs available</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Timestamp</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {logs.map((log) => (
+              <tr key={log.id}>
+                <td>{log.action}</td>
+                <td>{new Date(log.timestamp).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
-
