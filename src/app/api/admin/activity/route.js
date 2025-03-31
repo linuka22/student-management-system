@@ -8,14 +8,8 @@ export async function GET() {
       orderBy: { timestamp: "desc" },
     });
 
-    return new Response(JSON.stringify(logs), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return Response.json(logs);
   } catch (error) {
-    return new Response(
-      JSON.stringify({ error: "Failed to fetch logs" }),
-      { status: 500 }
-    );
+    return Response.json({ message: "Error fetching logs" }, { status: 500 });
   }
 }

@@ -1,37 +1,29 @@
-import { PrismaClient } from "@prisma/client";
 import { cookies } from "next/headers";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export async function POST() {
   try {
-    const adminId = cookies().get("adminSession");
+    const cookieStore = await cookies();
+    const adminSession = cookieStore.get("adminSession");
 
-    if (!adminId) {
-      return new Response(
-        JSON.stringify({ error: "No active session" }),
-        { status: 401 }
-      );
+    if (adminSession) {
+      // Log logout activity
+      await prisma.auditLog.create({
+        data: {
+          adminId: adminSession.value,
+          action: "Logged out",
+        },
+      });
+
+      // Clear session cookie
+      cookieStore.set("adminSession", "", { expires: new Date(0) });
     }
 
-    // Remove session
-    cookies().delete("adminSession");
-
-    // Log logout activity
-    await prisma.auditLog.create({
-      data: {
-        adminId: adminId.value,
-        action: "Logged out",
-      },
-    });
-
-    return new Response(
-      JSON.stringify({ message: "Logout successful" }),
-      { status: 200 }
-    );
+    return Response.json({ message: "Logged out" }, { status: 200 });
   } catch (error) {
-    return new Response(JSON.stringify({ error: "Server error" }), {
-      status: 500,
-    });
+    return Response.json({ message: "Server error" }, { status: 500 });
   }
 }
+

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,24 +8,38 @@ datasource db {
 }
 
 model Student {
-  id             String   @id @default(uuid())
+  id             Int      @id @default(autoincrement())  
+  studentId      String   @unique                     
   firstName      String
   lastName       String
   address        String
   dob            DateTime
-  degreeProgram  String
-  enrolledCourses Course[]
+  degreeProgramId Int  
+  degreeProgram  DegreeProgram @relation(fields: [degreeProgramId], references: [id])
+  enrolledCourses Course[] @relation(name: "StudentCourses") // 🔥 Fixed many-to-many relation
+}
+
+model DegreeProgram {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique 
+  description String?
+  students    Student[]
+  courses     Course[]
 }
 
 model Course {
-  id         String @id @default(uuid())
-  courseName String
-  credits    Int
-  students   Student[]
+  id              Int      @id @default(autoincrement())
+  courseName      String
+  credits         Int
+  degreeProgramId Int
+  degreeProgram   DegreeProgram @relation(fields: [degreeProgramId], references: [id])
+  students        Student[] @relation(name: "StudentCourses") // 🔥 Fixed many-to-many relation
 }
 
 model Administrator {
   id       String @id @default(uuid())
+  name     String  // ✅ Added admin name
+  email    String  @unique // ✅ Added email for notifications
   username String @unique
   password String
 }
@@ -42,4 +50,3 @@ model AuditLog {
   action    String
   timestamp DateTime @default(now())
 }
-

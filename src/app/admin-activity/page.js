@@ -6,25 +6,34 @@ export default function AdminActivity() {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-    const fetchLogs = async () => {
+    async function fetchLogs() {
       const res = await fetch("/api/admin/activity");
       const data = await res.json();
       setLogs(data);
-    };
-
+    }
     fetchLogs();
   }, []);
 
   return (
-    <div className="activity-container">
-      <h2>Admin Activity</h2>
-      <ul>
-        {logs.map((log) => (
-          <li key={log.id}>
-            {log.action} - {new Date(log.timestamp).toLocaleString()}
-          </li>
-        ))}
-      </ul>
+    <div className="admin-activity-container">
+      <h2>Admin Activity Log</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {logs.map((log) => (
+            <tr key={log.id}>
+              <td>{log.action}</td>
+              <td>{new Date(log.timestamp).toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
+

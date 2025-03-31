@@ -6,12 +6,15 @@ export default function Home() {
   const [adminName, setAdminName] = useState("");
 
   useEffect(() => {
-    setAdminName(localStorage.getItem("adminName") || "Admin");
+    const storedAdmin = localStorage.getItem("adminName");
+    if (storedAdmin) {
+      setAdminName(storedAdmin);
+    }
   }, []);
 
   return (
     <div className="home-container">
-      <h1>Welcome back, {adminName}!</h1>
+      <h1>Welcome back, {adminName ? adminName : "Admin"}!</h1>
       <div className="stats">
         <div className="stat-box">
           <h2>Total Students</h2>
@@ -25,3 +28,4 @@ export default function Home() {
     </div>
   );
 }
+
