@@ -1,0 +1,160 @@
+/* Container and form styling */
+.form-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  margin-top: 170px; /* Increased margin for better separation from navbar */
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading */
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Message styling for success/error */
+.message {
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 20px;
+  padding: 12px;
+  border-radius: 5px;
+}
+
+.message.success {
+  background-color: #e8f9e9;
+  color: #3c763d;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Form layout */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Input and select styles */
+input[type="text"],
+input[type="date"],
+select {
+  margin-bottom: 20px;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Input and select focus styling */
+input[type="text"]:focus,
+input[type="date"]:focus,
+select:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
+}
+
+/* Styling for dropdown select */
+select {
+  cursor: pointer;
+}
+
+/* Heading for courses section */
+h3 {
+  margin-top: 30px;
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Checkbox styling */
+div {
+  margin-bottom: 12px;
+}
+
+div input[type="checkbox"] {
+  margin-right: 12px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #333;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Checkbox checked state */
+div input[type="checkbox"]:checked {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+/* Custom checkmark when checked */
+div input[type="checkbox"]:checked::after {
+  content: '\2713';
+  color: white;
+  font-size: 16px;
+  display: block;
+  text-align: center;
+  line-height: 22px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Submit button styles */
+button[type="submit"] {
+  padding: 14px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 25px;
+}
+
+button[type="submit"]:hover {
+  background-color: #218838;
+  transform: translateY(-3px);
+}
+
+button[type="submit"]:active {
+  background-color: #1e7e34;
+  transform: translateY(1px);
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 20px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  select {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  button[type="submit"] {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+}

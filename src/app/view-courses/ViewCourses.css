@@ -1,0 +1,60 @@
+/* Add top margin to the body or container to ensure it doesn't overlap with the navbar */
+body {
+  margin-top: 80px; /* Adjust according to the height of your navbar */
+}
+
+.courses-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #333;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.degree-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 25px;
+  margin-bottom: 25px;
+  background: #fff;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.degree-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.degree-card h3 {
+  font-size: 1.6rem;
+  color: #2e8b57; /* Green color for the title */
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.degree-card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.degree-card li {
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: white;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  transition: background 0.3s ease;
+}
+
+.degree-card li:hover {
+  background: linear-gradient(135deg, #218838, #1e7e34);
+}

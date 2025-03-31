@@ -1,95 +1,77 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useEffect, useState } from "react";
+import "./home.css"; // Import the CSS file
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [adminName, setAdminName] = useState("");
+  const [totalStudents, setTotalStudents] = useState(0);
+  const [totalDegreePrograms, setTotalDegreePrograms] = useState(0);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    // Get the admin name from localStorage
+    const storedAdmin = localStorage.getItem("adminName");
+    if (storedAdmin) {
+      setAdminName(storedAdmin);
+    }
+
+    // Fetch total students and degree programs from the backend API
+    const fetchData = async () => {
+      try {
+        const studentsRes = await fetch("/api/stats/total-students");
+        const programsRes = await fetch("/api/stats/total-degree-programs");
+
+        if (studentsRes.ok && programsRes.ok) {
+          const studentsData = await studentsRes.json();
+          const programsData = await programsRes.json();
+
+          setTotalStudents(studentsData.total);
+          setTotalDegreePrograms(programsData.total);
+        } else {
+          console.error("Failed to fetch data from the server.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <div className="home-container">
+      <h1>Welcome back, {adminName ? adminName : "Admin"}!</h1>
+
+      {/* Stats Section */}
+      <div className="stats">
+        <div className="stat-box">
+          <h2>Total Students</h2>
+          <p>{totalStudents}</p>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="stat-box">
+          <h2>Total Degree Programs</h2>
+          <p>{totalDegreePrograms}</p>
+        </div>
+      </div>
+
+      {/* Quick Links Section */}
+      <div className="quick-links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="/add-student">➕ Add Student</a></li>
+          <li><a href="/view-students">📋 View Students</a></li>
+          <li><a href="/view-degree-programs">🎓 View Degree Programs</a></li>
+        </ul>
+      </div>
+
+      {/* Upcoming Deadlines Section */}
+      <div className="upcoming-deadlines">
+        <h3>Upcoming Deadlines</h3>
+        <ul>
+          <li>📌 Course Registration Deadline: 1st May 2025</li>
+          <li>📌 Student Application Deadline: 15th May 2025</li>
+        </ul>
+      </div>
     </div>
   );
 }
