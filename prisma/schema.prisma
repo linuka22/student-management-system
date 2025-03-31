@@ -8,40 +8,40 @@ datasource db {
 }
 
 model Student {
-  id             Int      @id @default(autoincrement())  
-  studentId      String   @unique                     
-  firstName      String
-  lastName       String
-  address        String
-  dob            DateTime
-  degreeProgramId Int  
-  degreeProgram  DegreeProgram @relation(fields: [degreeProgramId], references: [id])
-  enrolledCourses Course[] @relation(name: "StudentCourses") // 🔥 Fixed many-to-many relation
+  firstName       String
+  lastName        String
+  address         String
+  dob             DateTime
+  degreeProgramId Int
+  studentId       String        @unique
+  id              Int           @id @default(autoincrement())
+  degreeProgram   DegreeProgram @relation(fields: [degreeProgramId], references: [id])
+  enrolledCourses Course[]      @relation("StudentCourses")
 }
 
 model DegreeProgram {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique 
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
   description String?
-  students    Student[]
   courses     Course[]
+  students    Student[]
 }
 
 model Course {
-  id              Int      @id @default(autoincrement())
   courseName      String
   credits         Int
   degreeProgramId Int
+  id              Int           @id @default(autoincrement())
   degreeProgram   DegreeProgram @relation(fields: [degreeProgramId], references: [id])
-  students        Student[] @relation(name: "StudentCourses") // 🔥 Fixed many-to-many relation
+  students        Student[]     @relation("StudentCourses")
 }
 
 model Administrator {
   id       String @id @default(uuid())
-  name     String  // ✅ Added admin name
-  email    String  @unique // ✅ Added email for notifications
   username String @unique
   password String
+  email    String @unique
+  name     String
 }
 
 model AuditLog {
