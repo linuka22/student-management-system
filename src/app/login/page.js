@@ -25,6 +25,7 @@ export default function Login() {
     if (res.ok) {
       localStorage.setItem("adminName", data.username);
       router.push("/"); // Redirect to home after successful login
+      router.refresh(); // 🔥 Force refresh to update navbar
     } else {
       setError(data.error || "Invalid username or password.");
     }

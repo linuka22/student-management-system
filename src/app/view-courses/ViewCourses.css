@@ -1,12 +1,11 @@
 /* Add top margin to the body or container to ensure it doesn't overlap with the navbar */
-body {
-  margin-top: 80px; /* Adjust according to the height of your navbar */
-}
+
 
 .courses-container {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 30px;
+  margin-top: 100px;
 }
 
 h2 {
