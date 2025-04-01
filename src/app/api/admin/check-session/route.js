@@ -1,23 +1,21 @@
-import { cookies } from "next/headers"; // Import server-side session handling
+import { cookies } from "next/headers";
 
 export async function GET() {
   try {
-    const cookieStore = cookies(); // Access cookies in the server context
-    const adminSession = cookieStore.get("adminSession");
+    const cookieStore = await cookies(); // ⬅️ Await cookies()
+    const adminSession = cookieStore.get("adminSession")?.value || null; // Ensure we get the value
 
-    if (adminSession) {
-      return new Response(JSON.stringify({ isLoggedIn: true }), {
-        status: 200,
-      });
-    } else {
-      return new Response(JSON.stringify({ isLoggedIn: false }), {
-        status: 200,
-      });
-    }
+    console.log("Admin Session in API:", adminSession);
+
+    return new Response(JSON.stringify({ isLoggedIn: !!adminSession }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Error checking admin session:", error);
     return new Response(JSON.stringify({ message: "Server error" }), {
       status: 500,
+      headers: { "Content-Type": "application/json" },
     });
   }
 }
