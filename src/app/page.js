@@ -54,15 +54,17 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Quick Links Section */}
-      <div className="quick-links">
-        <h3>Quick Links</h3>
-        <ul>
-          <li><a href="/add-student">➕ Add Student</a></li>
-          <li><a href="/view-students">📋 View Students</a></li>
-          <li><a href="/view-degree-programs">🎓 View Degree Programs</a></li>
-        </ul>
-      </div>
+      {/* Quick Links Section - Display only if logged in */}
+      {adminName && (
+        <div className="quick-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="/add-student">➕ Add Student</a></li>
+            <li><a href="/view-students">📋 View Students</a></li>
+            <li><a href="/view-degree-programs">🎓 View Degree Programs</a></li>
+          </ul>
+        </div>
+      )}
 
       {/* Upcoming Deadlines Section */}
       <div className="upcoming-deadlines">
