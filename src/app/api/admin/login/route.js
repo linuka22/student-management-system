@@ -18,7 +18,7 @@ export async function POST(req) {
     }
 
     // Set the adminSession cookie with the admin id
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     cookieStore.set("adminSession", admin.id, { httpOnly: true, maxAge: 60 * 60 * 24 * 7 }); // Expires in 1 week
 
     // Log login activity in AuditLog

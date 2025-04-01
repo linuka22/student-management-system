@@ -1,4 +1,3 @@
-// src/app/api/admin/logout/route.js
 import { cookies } from "next/headers";
 import { PrismaClient } from "@prisma/client";
 
@@ -6,7 +5,7 @@ const prisma = new PrismaClient();
 
 export async function POST() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies(); // ✅ Await cookies()
     const adminSession = cookieStore.get("adminSession");
 
     if (adminSession) {
